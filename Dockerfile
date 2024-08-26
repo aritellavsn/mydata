@@ -7,8 +7,9 @@ RUN apk add --no-cache bash ttf-dejavu fontconfig
 # Create a non-root user
 RUN addgroup -S metabase && adduser -S metabase -G metabase
 
-# Create the plugins directory and set permissions
-RUN mkdir -p /plugins && chown -R metabase:metabase /plugins
+# Create necessary directories and set permissions
+RUN mkdir -p /app /plugins && \
+    chown -R metabase:metabase /app /plugins
 
 # Download and install Metabase jar
 RUN wget -q https://downloads.metabase.com/v0.50.21/metabase.jar -O /app/metabase.jar && \
@@ -18,4 +19,10 @@ EXPOSE 3000
 
 USER metabase
 
-CMD ["java", "-jar", "/app/metabase.jar"]
+WORKDIR /app
+
+CMD echo "Starting Metabase..." && \
+    echo "Java version:" && java -version && \
+    echo "Current user:" && id && \
+    echo "Metabase.jar location:" && ls -l /app/metabase.jar && \
+    java -jar /app/metabase.jar
