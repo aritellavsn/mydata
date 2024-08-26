@@ -1,1 +1,1 @@
-FROM aritellavsn/waresdata:latest
+FROM aritellavsn/waresdata:main
