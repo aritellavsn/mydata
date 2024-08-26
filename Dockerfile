@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 ENV FC_LANG=en-US LC_CTYPE=en_US.UTF-8
 
@@ -21,4 +21,7 @@ USER metabase
 
 WORKDIR /app
 
-CMD ["java", "-jar", "/app/metabase.jar"]
+# Add Java options for better container support
+ENV JAVA_OPTS="-XX:+IgnoreUnrecognizedVMOptions -XX:+UseContainerSupport -XX:MaxRAMPercentage=75"
+
+CMD ["sh", "-c", "java $JAVA_OPTS -jar /app/metabase.jar"]
