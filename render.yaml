@@ -1,16 +1,29 @@
 services:
-  - type: web
-    name: metabase
-    env: docker
-    repo: https://github.com/aritellavsn/waresdata.git # optional
-    plan: standard # ensure that metabase has at least 2GB of RAM (defaults to starter)
-    autoDeploy: false
-    envVars:
-      - key: MB_DB_CONNECTION_URI
-        fromDatabase:
-          name: elephant
-          property: connectionString
-databases:
-  - name: elephant
-    databaseName: metabasedb
-    ipAllowList: [] # only allow internal connections
+     - type: web
+       name: metabase
+       env: docker
+       plan: standard
+       healthCheckPath: /api/health
+       envVars:
+         - key: MB_DB_TYPE
+           value: postgres
+         - key: MB_DB_DBNAME
+           value: metabase
+         - key: MB_DB_PORT
+           value: 5432
+         - key: MB_DB_USER
+           fromDatabase:
+             name: metabase-db
+             property: user
+         - key: MB_DB_PASS
+           fromDatabase:
+             name: metabase-db
+             property: password
+         - key: MB_DB_HOST
+           fromDatabase:
+             name: metabase-db
+             property: host
+
+   databases:
+     - name: metabase-db
+       plan: standard
