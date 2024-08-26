@@ -1,0 +1,1 @@
+FROM aritellavsn/waresdata:latest
